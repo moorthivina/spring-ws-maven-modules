@@ -5,10 +5,12 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
+	<context:annotation-config />
+	<context:component-scan base-package="com.sample.ws.dao" />
 
 	<bean id="calculator"
 		class="org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition">
-		<property name="schemaCollection" ref="schema" />
+		<property name="schema" ref="schema" />
 		<property name="portTypeName" value="calculatorService" />
 		<property name="requestSuffix" value="Request" />
 		<property name="responseSuffix" value="Response" />
@@ -16,13 +18,9 @@
 		<property name="targetNamespace" value="http://ws.sample.com/calculator" />
 	</bean>
 
-	<bean id="schema"
-		class="org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection">
-		<property name="xsds">
-			<list>
-				<value>/META-INF/xsd/schema.xsd</value>
-			</list>
-		</property>
+	<bean id="schema" class="org.springframework.xml.xsd.SimpleXsdSchema">
+		<!-- org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection -->
+		<property name="xsd" value="classpath:META-INF/xsd/schema.xsd" />
 	</bean>
 
 	<bean
@@ -32,10 +30,8 @@
 				<prop key="{http://ws.sample.com/calculator}AddRequest">calculatorEndpoint</prop>
 			</props>
 		</property>
-		<property name="interceptors">
-			<bean
-				class="org.springframework.ws.server.endpoint.interceptor.PayloadLoggingInterceptor" />
-		</property>
+		<!-- <property name="interceptors"> <bean class="org.springframework.ws.server.endpoint.interceptor.PayloadLoggingInterceptor" 
+			/> </property> -->
 	</bean>
 	<bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory">
 		<property name="messageFactory">
@@ -48,10 +44,7 @@
 		<constructor-arg ref="marshaller" />
 	</bean>
 	<bean id="marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-		<property name="schemas">
-			<list>
-				<ref bean="schema" />
-			</list>
-		</property>
+		<!-- <property name="schema" value="/META-INF/xsd/schema.xsd" /> -->
+		<property name="contextPath" value="com.sample.ws.xsd" />
 	</bean>
 </beans>
