@@ -10,19 +10,29 @@
 
 	<bean id="calculator"
 		class="org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition">
-		<property name="schema" ref="schema" />
+		<!-- <property name="schema" ref="schema" /> -->
+		<property name="schemaCollection" ref="schemas" />
 		<property name="portTypeName" value="calculatorService" />
 		<property name="requestSuffix" value="Request" />
 		<property name="responseSuffix" value="Response" />
-		<!-- <property name="locationUri" value="/holidayService/" /> -->
+		<property name="locationUri" value=service />
 		<property name="targetNamespace" value="http://ws.sample.com/calculator" />
 	</bean>
 
 	<bean id="schema" class="org.springframework.xml.xsd.SimpleXsdSchema">
-		<!-- org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection -->
 		<property name="xsd" value="classpath:META-INF/xsd/schema.xsd" />
 	</bean>
 
+	<bean id="schemas"
+		class="org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection">
+		<property name="xsds">
+			<list>
+				<value>classpath:META-INF/xsd/schema.xsd</value>
+			</list>
+		</property>
+		<property name="inline" value="true" />
+		
+	</bean>
 	<bean
 		class="org.springframework.ws.server.endpoint.mapping.PayloadRootQNameEndpointMapping">
 		<property name="mappings">
